@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<link rel="stylesheet" href="/assets/css/dashboard.css">
 
 <c:if test="${empty sessionScope.loggedUser}">
     <c:redirect url="/login"/>

@@ -25,6 +25,8 @@
             <span class="user-name">
                 ${sessionScope.customerName}
             </span>
+
+             <a href="/logout" class="logout-btn">Logout</a>
         </div>
     </header>
 
@@ -34,7 +36,7 @@
         <aside class="sidebar">
             <nav class="nav-menu">
                 <a href="/customer/dashboard" class="nav-item">Dashboard</a>
-                <a href="/customer/orders" class="nav-item">My Orders</a>
+                <a href="/customer/my-orders" class="nav-item">My Orders</a>
                 <a href="/customer/place-order" class="nav-item">Place New Order</a>
                 <a href="/customer/track" class="nav-item">Track Package</a>
                 <a href="/customer/settings" class="nav-item">Settings</a>
@@ -136,4 +138,12 @@
 </div>
 
 </body>
+
+<!-- Curved animated background lines -->
+<svg class="curved-lines" viewBox="0 0 1200 800" preserveAspectRatio="none">
+    <path d="M0,200 C300,100 600,300 1200,150" />
+    <path d="M0,400 C400,250 800,450 1200,300" />
+    <path d="M0,600 C350,500 750,650 1200,520" />
+</svg>
+
 </html>
