@@ -1,0 +1,82 @@
+package com.smartlogistics.dao;
+
+import com.smartlogistics.model.Order;
+import com.smartlogistics.util.DBUtil;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+public class OrderDAO{
+        public boolean placeOrder(Order order){
+            String sql = "INSERT INTO orders " + 
+            "(customer_id , pickup_address_id , delivery_address_id , order_status)" +
+            "VALUES(?,?,?,?)";
+
+            try(
+                Connection con = DBUtil.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);
+            ) {
+                ps.setInt(1,order.getCustomerId());
+                ps.setInt(2,order.getPickupAddressId());
+                ps.setInt(3,order.getDeliveryAddressId());
+                ps.setString(4,order.getOrderStatus());
+
+                return ps.executeUpdate() > 0;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+         return false;   
+        }
+
+
+
+        public List<Order> getOrdersByCustomerId(int customerId) {
+
+    List<Order> orders = new ArrayList<>();
+
+    String sql =
+        "SELECT o.order_id, o.order_status, o.order_date, " +
+        "pa.address_line AS pickup_address, " +
+        "da.address_line AS delivery_address " +
+        "FROM orders o " +
+        "JOIN addresses pa ON o.pickup_address_id = pa.address_id " +
+        "JOIN addresses da ON o.delivery_address_id = da.address_id " +
+        "WHERE o.customer_id = ? " +
+        "ORDER BY o.order_date DESC";
+
+    try (
+        Connection con = DBUtil.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql)
+    ) {
+
+        ps.setInt(1, customerId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+
+                Order order = new Order();
+                order.setOrderId(rs.getInt("order_id"));
+                order.setOrderStatus(rs.getString("order_status"));
+                order.setOrderDate(rs.getTimestamp("order_date"));
+
+                // 🔥 readable addresses
+                order.setPickupAddress(rs.getString("pickup_address"));
+                order.setDeliveryAddress(rs.getString("delivery_address"));
+
+                orders.add(order);
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return orders;
+}
+
+}

@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "DBConnectionTest",
+            "request": "launch",
+            "mainClass": "com.smartlogistics.test.DBConnectionTest",
+            "projectName": "smart-logistics"
+        },
+        {
+            "type": "java",
+            "name": "OrderCliRunner",
+            "request": "launch",
+            "mainClass": "com.smartlogistics.dao.OrderCliRunner",
+            "projectName": "smart-logistics"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SmartLogisticsApplication<smart-logistics>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.smartlogistics.SmartLogisticsApplication",
+            "projectName": "smart-logistics",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
