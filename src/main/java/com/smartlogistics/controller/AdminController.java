@@ -15,34 +15,38 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AdminController {
+
     private UserDAO userDAO = new UserDAO();
 
+    // =========================
+    // ADMIN / SUPER ADMIN DASHBOARD
+    // =========================
     @GetMapping("/admin/dashboard")
     public String adminDashboard(HttpSession session, Model model) {
 
         User user = (User) session.getAttribute("loggedUser");
 
-        // only admin or super admin allowed
         if (user == null ||
-           (user.getRoleId() != User.ROLE_ADMIN &&
-            user.getRoleId() != User.ROLE_SUPER_ADMIN)) {
+            (user.getRoleId() != User.ROLE_ADMIN &&
+             user.getRoleId() != User.ROLE_SUPER_ADMIN)) {
             return "redirect:/login";
         }
 
         model.addAttribute("adminName", user.getUsername());
-
         return "admin-dashboard";
     }
 
-
+    // =========================
+    // VIEW ADMINS AND AGENTS
+    // =========================
     @GetMapping("/admin/users")
     public String viewAdminsAndAgents(HttpSession session, Model model) {
 
-        User admin = (User) session.getAttribute("loggedUser");
+        User logged = (User) session.getAttribute("loggedUser");
 
-        if (admin == null ||
-                (admin.getRoleId() != User.ROLE_ADMIN &&
-                        admin.getRoleId() != User.ROLE_SUPER_ADMIN)) {
+        if (logged == null ||
+            (logged.getRoleId() != User.ROLE_ADMIN &&
+             logged.getRoleId() != User.ROLE_SUPER_ADMIN)) {
             return "redirect:/login";
         }
 
@@ -52,30 +56,68 @@ public class AdminController {
         return "admin-users";
     }
 
+    // =========================
+    // SHOW ADD USER PAGE
+    // =========================
     @GetMapping("/admin/add-user")
-    public String showAddUser(HttpSession session) {
+    public String showAddUser(
+            @RequestParam(required = false) String role,
+            HttpSession session,
+            Model model) {
 
-        User admin = (User) session.getAttribute("loggedUser");
+        User logged = (User) session.getAttribute("loggedUser");
 
-        if (admin == null || admin.getRoleId() != User.ROLE_SUPER_ADMIN) {
+        if (logged == null || role == null) {
             return "redirect:/login";
         }
 
-        return "add-user"; // add-user.jsp
+        // SUPER ADMIN → ADMIN
+        if ("ADMIN".equals(role) &&
+            logged.getRoleId() != User.ROLE_SUPER_ADMIN) {
+            return "redirect:/login";
+        }
+
+        // ADMIN → AGENT
+        if ("AGENT".equals(role) &&
+            logged.getRoleId() != User.ROLE_ADMIN) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("role", role);
+        return "add-user";
     }
 
-
+    // =========================
+    // HANDLE ADD USER
+    // =========================
     @PostMapping("/admin/add-user")
     public String addUser(
             @RequestParam String username,
             @RequestParam String password,
-            @RequestParam int roleId,
+            @RequestParam String role,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        User admin = (User) session.getAttribute("loggedUser");
+        User logged = (User) session.getAttribute("loggedUser");
 
-        if (admin == null || admin.getRoleId() != User.ROLE_SUPER_ADMIN) {
+        if (logged == null) {
+            return "redirect:/login";
+        }
+
+        int roleId;
+
+        // SUPER ADMIN → ADMIN
+        if ("ADMIN".equals(role) &&
+            logged.getRoleId() == User.ROLE_SUPER_ADMIN) {
+            roleId = User.ROLE_ADMIN;
+        }
+        // ADMIN → AGENT
+        else if ("AGENT".equals(role) &&
+                 logged.getRoleId() == User.ROLE_ADMIN) {
+            roleId = User.ROLE_AGENT;
+        }
+        // INVALID ACCESS
+        else {
             return "redirect:/login";
         }
 
@@ -96,5 +138,4 @@ public class AdminController {
 
         return "redirect:/admin/users";
     }
-
 }

@@ -1,10 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<c:if test="${empty sessionScope.loggedUser}">
+    <c:redirect url="/login"/>
+</c:if>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Admin or Agent</title>
+    <title>
+        <c:choose>
+            <c:when test="${role == 'ADMIN'}">Add Admin</c:when>
+            <c:otherwise>Add Agent</c:otherwise>
+        </c:choose>
+    </title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,7 +27,7 @@
             padding: 20px;
             border-radius: 6px;
         }
-        input, select, button {
+        input, button {
             width: 100%;
             padding: 8px;
             margin-top: 10px;
@@ -36,35 +46,30 @@
 <body>
 
 <div class="container">
-    <h2>Add Admin or Agent</h2>
 
-    <!-- ADD USER FORM -->
+    <h2>
+        <c:choose>
+            <c:when test="${role == 'ADMIN'}">Add Admin</c:when>
+            <c:otherwise>Add Agent</c:otherwise>
+        </c:choose>
+    </h2>
+
     <form action="/admin/add-user" method="post">
 
-        <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            required
-        />
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" placeholder="Password" required />
 
-        <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-        />
+        <!-- ROLE COMES FROM DASHBOARD -->
+        <input type="hidden" name="role" value="${role}" />
 
-        <select name="roleId" required>
-            <option value="">Select Role</option>
-            <option value="2">ADMIN</option>
-            <option value="3">AGENT</option>
-        </select>
-
-        <button type="submit">Create User</button>
+        <button type="submit">
+            <c:choose>
+                <c:when test="${role == 'ADMIN'}">Create Admin</c:when>
+                <c:otherwise>Create Agent</c:otherwise>
+            </c:choose>
+        </button>
     </form>
 
-    <!-- FEEDBACK MESSAGES -->
     <c:if test="${not empty success}">
         <p class="msg-success">${success}</p>
     </c:if>
