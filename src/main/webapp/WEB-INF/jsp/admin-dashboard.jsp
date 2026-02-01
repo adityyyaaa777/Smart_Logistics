@@ -55,10 +55,10 @@ response.setDateHeader("Expires", 0);
                 <!-- ADMIN MENU -->
                 <c:if test="${sessionScope.loggedUser.roleId == 2}">
                     <a href="/admin/view-admins" class="nav-item">View Admins</a>
-                    <a href="/admin/add-user?role=AGENT" class="nav-item">Add Agent</a>
                     <a href="/admin/view-agents" class="nav-item">View Agents</a>
-                    <a href="/admin/users" class="nav-item">Manage Users</a>
-                    <a href="/admin/orders" class="nav-item">Manage Orders</a>
+                    <a href="/admin/add-user?role=AGENT" class="nav-item">Add Agent</a>
+                    <a href="/admin/manage-users" class="nav-item">Manage Users</a>
+                    <a href="/admin/manage-orders" class="nav-item">Manage Orders</a>
                 </c:if>
 
             </nav>
@@ -117,13 +117,13 @@ response.setDateHeader("Expires", 0);
                         <small>See system administrators</small>
                     </a>
 
-                    <a href="/admin/orders" class="quick-card">
+                    <a href="/admin/manage-orders" class="quick-card">
                         <strong>Manage Orders</strong>
                         <small>View update order status</small>
                     </a>
 
-                    <a href="/admin/users" class="quick-card">
-                        <strong>View Users</strong>
+                    <a href="/admin/manage-users" class="quick-card">
+                        <strong>Manage Users</strong>
                         <small>Monitor registered users</small>
                     </a>
                 </div>

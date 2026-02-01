@@ -45,8 +45,7 @@ public class AdminController {
         User logged = (User) session.getAttribute("loggedUser");
 
         if (logged == null ||
-            (logged.getRoleId() != User.ROLE_ADMIN &&
-             logged.getRoleId() != User.ROLE_SUPER_ADMIN)) {
+            (logged.getRoleId() != User.ROLE_SUPER_ADMIN)) {
             return "redirect:/login";
         }
 
@@ -138,4 +137,72 @@ public class AdminController {
 
         return "redirect:/admin/users";
     }
+
+    @GetMapping("/admin/view-admins")
+    public String viewAdmins(HttpSession session, Model model) {
+
+        User logged = (User) session.getAttribute("loggedUser");
+
+        if (logged == null ||
+                (logged.getRoleId() != User.ROLE_ADMIN &&
+                        logged.getRoleId() != User.ROLE_SUPER_ADMIN)) {
+            return "redirect:/login";
+        }
+
+        List<User> admins = userDAO.getAdmins(); // create DAO method
+        model.addAttribute("admins", admins);
+
+        return "view-admins";
+    }
+
+    // AGENTS
+    @GetMapping("/admin/view-agents")
+    public String viewAgents(HttpSession session, Model model) {
+
+        User logged = (User) session.getAttribute("loggedUser");
+
+        if (logged == null ||
+                (logged.getRoleId() != User.ROLE_ADMIN &&
+                        logged.getRoleId() != User.ROLE_SUPER_ADMIN)) {
+            return "redirect:/login";
+        }
+
+        List<User> agents = userDAO.getAgents();
+        model.addAttribute("agents", agents);
+
+        return "view-agents";
+    }
+
+    // MANAGE USERS
+    @GetMapping("/admin/manage-users")
+    public String manageUsers(HttpSession session) {
+
+        User logged = (User) session.getAttribute("loggedUser");
+
+        if (logged == null ||
+                logged.getRoleId() != User.ROLE_ADMIN) {
+            return "redirect:/login";
+        }
+
+        return "manage-users";
+    }
+
+
+     // MANAGE ORDERS
+    @GetMapping("/admin/manage-orders")
+    public String manageOrders(HttpSession session) {
+
+        User logged = (User) session.getAttribute("loggedUser");
+
+        if (logged == null ||
+                logged.getRoleId() != User.ROLE_ADMIN) {
+            return "redirect:/login";
+        }
+
+        return "manage-orders";
+    }
+
+
+    
+
 }

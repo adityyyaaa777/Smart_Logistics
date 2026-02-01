@@ -54,10 +54,37 @@ CREATE PROCEDURE get_admins_and_agents ()
 BEGIN
     SELECT user_id, username, role_id
     FROM users
-    WHERE role_id IN (1,2);
+    WHERE role_id IN (2,3);
 END$$
 
 DELIMITER ;
+
+
+# GET ADMINS LIST;
+DELIMITER $$
+
+CREATE PROCEDURE get_admins()
+BEGIN
+    SELECT user_id, username, role_id
+    FROM users
+    WHERE role_id = 2;
+END $$
+
+DELIMITER ;
+
+# GET AGENTS LIST;
+DELIMITER $$
+
+CREATE PROCEDURE get_agents()
+BEGIN
+    SELECT user_id, username, role_id
+    FROM users
+    WHERE role_id = 3;
+END $$
+
+DELIMITER ;
+
+
 
 DROP PROCEDURE get_admins_and_agents ;
 DROP PROCEDURE IF EXISTS create_admin_or_agent;

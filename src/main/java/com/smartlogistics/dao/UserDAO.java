@@ -212,4 +212,62 @@ public class UserDAO {
         return users;
     }
 
+    // GET ALL ADMIN ONLY FROM STORED PROCEDURES
+
+    public List<User> getAdmins()
+    {
+        List<User> admins = new ArrayList<User>();
+
+        String sql = "CALL get_admins()";
+
+        try(
+            Connection con = DBUtil.getConnection();
+            CallableStatement cs = con.prepareCall(sql);
+            ResultSet rs = cs.executeQuery();
+        ) {
+            while(rs.next()){
+                User u = new User();
+                u.setUserId(rs.getInt("user_id"));
+                u.setUsername(rs.getString("username"));
+                u.setRoleId(rs.getInt("role_id"));
+                admins.add(u);
+            }
+            
+        } catch (Exception e) {
+            
+            e.printStackTrace();
+        }
+
+        return admins;
+    }
+
+    // GET ALL ADMIN ONLY FROM STORED PROCEDURES
+
+    public List<User> getAgents()
+    {
+        List<User> admins = new ArrayList<User>();
+
+        String sql = "CALL get_agents()";
+
+        try(
+            Connection con = DBUtil.getConnection();
+            CallableStatement cs = con.prepareCall(sql);
+            ResultSet rs = cs.executeQuery();
+        ) {
+            while(rs.next()){
+                User u = new User();
+                u.setUserId(rs.getInt("user_id"));
+                u.setUsername(rs.getString("username"));
+                u.setRoleId(rs.getInt("role_id"));
+                admins.add(u);
+            }
+            
+        } catch (Exception e) {
+            
+            e.printStackTrace();
+        }
+
+        return admins;
+    }
+
 }
