@@ -5,6 +5,7 @@ public class Order {
     
     private int orderId;
     private int customerId;
+    private String customerName;
     private int pickupAddressId;
     private int deliveryAddressId;
     private String orderStatus;
@@ -36,6 +37,14 @@ public class Order {
 
     public void setCustomerId(int customerId){
         this.customerId = customerId;
+    }
+
+    public String getCustomerName(){
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName){
+        this.customerName = customerName;
     }
 
 

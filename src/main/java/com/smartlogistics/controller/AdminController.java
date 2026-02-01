@@ -1,7 +1,9 @@
 package com.smartlogistics.controller;
 
 import com.smartlogistics.dao.UserDAO;
+import com.smartlogistics.dao.OrderDAO;
 import com.smartlogistics.model.User;
+import com.smartlogistics.model.Order;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
@@ -195,15 +197,17 @@ public class AdminController {
 
      // MANAGE ORDERS
     @GetMapping("/admin/manage-orders")
-    public String manageOrders(HttpSession session) {
+    public String manageOrders(HttpSession session,Model model) {
 
         User logged = (User) session.getAttribute("loggedUser");
-
+        OrderDAO orderDAO = new OrderDAO();
         if (logged == null ||
                 logged.getRoleId() != User.ROLE_ADMIN) {
             return "redirect:/login";
         }
 
+        List <Order> orders = orderDAO.getAllOrders();
+        model.addAttribute("orders", orders);
         return "manage-orders";
     }
 

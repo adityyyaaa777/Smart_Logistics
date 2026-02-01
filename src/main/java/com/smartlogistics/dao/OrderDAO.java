@@ -5,6 +5,7 @@ import com.smartlogistics.util.DBUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.CallableStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class OrderDAO{
 
         public List<Order> getOrdersByCustomerId(int customerId) {
 
-    List<Order> orders = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
 
         String sql =
         "SELECT o.order_id, o.order_status, o.order_date, " +
@@ -116,5 +117,36 @@ public class OrderDAO{
 
     return orders;
 }
+
+        public List<Order> getAllOrders() {
+
+            List<Order> list = new ArrayList<>();
+
+            try {
+                Connection con = DBUtil.getConnection();
+
+                CallableStatement cs = 
+                    con.prepareCall("{CALL GetAllOrders()}");
+
+                ResultSet rs = cs.executeQuery();
+
+                while(rs.next()) {
+                    Order o = new Order();
+                    o.setOrderId(rs.getInt("order_id"));
+                    o.setCustomerName(rs.getString("customer_name"));
+                    o.setPickupAddress(rs.getString("pickup_address"));
+                    o.setDeliveryAddress(rs.getString("delivery_address"));
+                    o.setOrderStatus(rs.getString("order_status"));
+
+                    list.add(o);
+                }
+
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+
+            return list;
+        }
+
 
 }
