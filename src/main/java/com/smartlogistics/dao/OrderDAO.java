@@ -5,6 +5,7 @@ import com.smartlogistics.util.DBUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class OrderDAO{
 
             try(
                 Connection con = DBUtil.getConnection();
-                PreparedStatement orderPs =  con.prepareStatement(orderSql, PreparedStatement.RETURN_GENERATED_KEYS);
+                PreparedStatement orderPs =  con.prepareStatement(orderSql, Statement.RETURN_GENERATED_KEYS);
             ) { 
                 // ---------- INSERT ORDER ----------
                 orderPs.setInt(1,order.getCustomerId());
@@ -67,15 +68,19 @@ public class OrderDAO{
 
     List<Order> orders = new ArrayList<>();
 
-    String sql =
+        String sql =
         "SELECT o.order_id, o.order_status, o.order_date, " +
-        "pa.address_line AS pickup_address, " +
-        "da.address_line AS delivery_address " +
+        "pa.address_line AS pickup_address, pa.city AS pickup_city, " +
+        "da.address_line AS delivery_address, da.city AS delivery_city, " +
+        "i.item_name, i.quantity, i.weight, i.shipping_type " +
         "FROM orders o " +
         "JOIN addresses pa ON o.pickup_address_id = pa.address_id " +
         "JOIN addresses da ON o.delivery_address_id = da.address_id " +
+        "LEFT JOIN order_items i ON o.order_id = i.order_id " +
         "WHERE o.customer_id = ? " +
         "ORDER BY o.order_date DESC";
+
+
 
     try (
         Connection con = DBUtil.getConnection();
@@ -91,10 +96,15 @@ public class OrderDAO{
                 order.setOrderId(rs.getInt("order_id"));
                 order.setOrderStatus(rs.getString("order_status"));
                 order.setOrderDate(rs.getTimestamp("order_date"));
-
-                // 🔥 readable addresses
                 order.setPickupAddress(rs.getString("pickup_address"));
                 order.setDeliveryAddress(rs.getString("delivery_address"));
+                order.setPickupCity(rs.getString("pickup_city"));
+                order.setDeliveryCity(rs.getString("delivery_city"));
+                order.setItemName(rs.getString("item_name"));
+                order.setQuantity(rs.getInt("quantity"));
+                order.setWeight(rs.getDouble("weight"));
+                order.setShippingType(rs.getString("shipping_type"));
+
 
                 orders.add(order);
             }

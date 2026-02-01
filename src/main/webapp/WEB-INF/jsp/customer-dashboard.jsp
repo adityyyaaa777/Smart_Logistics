@@ -85,28 +85,7 @@
     <!-- Lower section -->
     <div class="dashboard-lower">
 
-        <!-- Recent activity -->
-        <div class="panel">
-            <h3>Recent Activity</h3>
-
-            <c:forEach var="order" items="${recentOrders}">
-                <div class="activity-row">
-                    <div>
-                        <strong>${order.orderId}</strong><br>
-                        <span>${order.deliveryAddress}</span>
-                    </div>
-                    <div class="activity-right">
-                        <span>${order.status}</span><br>
-                        <small>${order.orderDate}</small>
-                    </div>
-                </div>
-            </c:forEach>
-
-            <c:if test="${empty recentOrders}">
-                <p>No recent activity found</p>
-            </c:if>
-        </div>
-
+    
         <!-- Quick actions -->
         <div class="panel">
             <h3>Quick Actions</h3>

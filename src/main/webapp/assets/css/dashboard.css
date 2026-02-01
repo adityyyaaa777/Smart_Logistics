@@ -160,7 +160,7 @@ body {
 ================================================== */
 select {
   background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.03));
-  color:white;border:none;border-radius:.6rem;padding:.6rem .8rem;
+  color:white;border:none;border-radius:.6rem;padding:.6rem .8rem;width:350px;
 }
 select option{background:#1e1b4b;color:white;}
 
@@ -266,3 +266,226 @@ legend{color:#e9d5ff;padding:0 .4rem;font-size:.9rem;}
   border-color: rgba(139,92,246,0.4);
 }
 
+
+
+/* DARK PANEL */
+.orders-panel {
+  padding: 1.8rem;
+  border-radius: 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(20,10,45,0.85),
+    rgba(40,20,80,0.65)
+  );
+  box-shadow: 
+    0 15px 60px rgba(76,29,149,0.45),
+    inset 0 0 40px rgba(139,92,246,0.15);
+  backdrop-filter: blur(18px);
+}
+
+/* DARK TABLE */
+.dark-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background: rgba(15, 8, 35, 0.6);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.dark-table th {
+  background: rgba(139,92,246,0.15);
+  color: #e9d5ff;
+  font-weight: 600;
+  padding: 1rem;
+}
+
+.dark-table td {
+  padding: 1rem;
+  color: #ddd6fe;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.dark-table tr:hover {
+  background: rgba(139,92,246,0.08);
+}
+
+/* FILTER BUTTON */
+.filter-bar button {
+  background: linear-gradient(135deg,#7c3aed,#4c1d95);
+  color: white;
+  border: none;
+  border-radius: 0.6rem;
+  padding: 0.6rem 1rem;
+  box-shadow: 0 0 20px rgba(139,92,246,0.5);
+}
+
+.filter-bar button:hover {
+  box-shadow: 0 0 35px rgba(139,92,246,0.9);
+}
+
+
+/* ==================================================
+   MY ORDERS PAGE ONLY – DARK HEADER + SIDEBAR
+================================================== */
+
+.orders-page-dark .header {
+  background: linear-gradient(
+    135deg,
+    #0e061f,
+    #1a0b35
+  ) !important;
+
+  box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+  border-bottom: 1px solid rgba(139,92,246,0.25);
+}
+
+.orders-page-dark .sidebar {
+  background: linear-gradient(
+    180deg,
+    #0b041a,
+    #160a2e
+  ) !important;
+
+  box-shadow: 8px 0 35px rgba(0,0,0,0.7);
+  border-right: 1px solid rgba(139,92,246,0.2);
+}
+
+/* Sidebar hover glow */
+.orders-page-dark .nav-item:hover {
+  background: rgba(139,92,246,0.12);
+  box-shadow: inset 0 0 15px rgba(139,92,246,0.25);
+}
+
+/* Header app name slight glow */
+.orders-page-dark .app-name {
+  color: #e9d5ff;
+  text-shadow: 0 0 10px rgba(139,92,246,0.4);
+}
+
+/* ===== OUTLINE BUTTON (VIEW DASHBOARD STYLE) ===== */
+.outline-btn {
+  padding: 0.75rem 1.4rem;
+  display: flex;
+  border-radius: 0.8rem;
+  background: transparent;
+  color: #e9d5ff;
+  border: 1.5px solid rgba(233,213,255,0.7);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.outline-btn:hover {
+  background: rgba(139,92,246,0.12);
+  box-shadow: 0 0 20px rgba(139,92,246,0.5);
+  transform: translateY(-2px);
+}
+
+/* CENTER BUTTON */
+.btn-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+
+/* ===== DARK INPUTS FOR PLACE ORDER ===== */
+.place-order-page input,
+.place-order-page textarea {
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.08),
+    rgba(255,255,255,0.03)
+  );
+  color: white;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  backdrop-filter: blur(6px);
+}
+
+/* Placeholder color */
+.place-order-page input::placeholder,
+.place-order-page textarea::placeholder {
+  color: #c7d2fe;
+  opacity: 0.8;
+}
+
+/* Remove white autofill in Chrome */
+.place-order-page input:-webkit-autofill,
+.place-order-page textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #1e1b4b inset !important;
+  -webkit-text-fill-color: white !important;
+}
+
+/* ADDRESS HEADER ROW */
+.address-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+/* ADD ADDRESS CHIP */
+.add-address-chip {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.6rem;
+  text-decoration: none;
+  color: #c7d2fe;
+
+  background: linear-gradient(
+    135deg,
+    rgba(139,92,246,0.25),
+    rgba(76,29,149,0.25)
+  );
+
+  border: 1px solid rgba(139,92,246,0.35);
+  transition: all 0.2s ease;
+}
+
+.add-address-chip:hover {
+  color: white;
+  box-shadow: 0 0 12px rgba(139,92,246,0.7);
+  transform: translateY(-1px);
+}
+
+
+/* DARK SEARCH BOX */
+.search-box {
+  position: relative;
+  width: 260px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(139,92,246,0.35);
+
+  background: linear-gradient(
+    135deg,
+    rgba(25,12,55,0.9),
+    rgba(45,22,85,0.7)
+  );
+
+  color: #e9d5ff;
+  outline: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 10px rgba(139,92,246,0.15);
+}
+
+/* Placeholder color */
+.search-box input::placeholder {
+  color: #a78bfa;
+  opacity: 0.8;
+}
+
+/* Focus Glow */
+.search-box input:focus {
+  border-color: #a78bfa;
+  box-shadow: 0 0 18px rgba(139,92,246,0.6);
+  background: rgba(35,18,70,0.9);
+}

@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <c:if test="${empty sessionScope.loggedUser}">
@@ -13,101 +14,163 @@
 
 <body>
 
-<div class="animated-gradient"></div>
-<div class="blob blob--one"></div>
-<div class="blob blob--two"></div>
-
-<svg class="curved-lines" viewBox="0 0 1200 800" preserveAspectRatio="none">
-    <path d="M0,200 C300,100 600,300 1200,150" />
-    <path d="M0,400 C400,250 800,450 1200,300" />
-    <path d="M0,600 C350,500 750,650 1200,520" />
-</svg>
-
 <div class="page-wrapper">
 
-    <div class="header glass-card">
-        <span class="app-name">Smart Logistics</span>
-        <div>
-            <span class="user-name">${sessionScope.customerName}</span>
-            <a href="/logout" class="logout-btn">Logout</a>
+     <!-- HEADER -->
+    <header class="header">
+        <div class="header-left">
+            <span class="app-name">Smart Logistics</span>
         </div>
-    </div>
+
+        <div class="header-right">
+            <span class="user-name">
+                ${sessionScope.customerName}
+            </span>
+
+             <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+    </header>
 
     <div class="body-wrapper">
 
-        <aside class="sidebar glass-card">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
             <nav class="nav-menu">
                 <a href="/customer/dashboard" class="nav-item">Dashboard</a>
                 <a href="/customer/my-orders" class="nav-item">My Orders</a>
-                <a href="/customer/place-order" class="nav-item">Place Order</a>
+                <a href="/customer/place-order" class="nav-item">Place New Order</a>
+                <a href="/customer/track" class="nav-item">Track Package</a>
+                <a href="/customer/settings" class="nav-item">Settings</a>
             </nav>
         </aside>
 
+        <!-- MAIN -->
         <main class="main-content">
 
             <div class="place-order-page glass-card">
 
                 <h2>Place New Order</h2>
-                <p class="page-subtitle">Fill in the details below</p>
+               
 
                 <form method="post" action="/customer/place-order">
 
-                    <fieldset>  
-                        <legend>Pickup</legend>
-                        <select name="pickupAddressId">
-                            <c:forEach var="addr" items="${addressList}">
-                                <option value="${addr.addressId}">
-                                    ${addr.addressLine}, ${addr.city}
-                                </option>
-                            </c:forEach>
+                    <!-- PICKUP -->
+                    <fieldset>
+                        <legend>Pickup Address</legend>
+
+                        <c:choose>
+
+                            <c:when test="${not empty addressList}">
+
+                                <div class="address-header">
+                                    <label>Select Address</label>
+
+                                    <a href="/customer/add-address" class="add-address-chip">
+                                        + Add New Address
+                                    </a>
+                                </div>
+
+                                <select name="pickupAddressId" required>
+                                    <c:forEach var="addr" items="${addressList}">
+                                        <option value="${addr.addressId}">
+                                            ${addr.addressLine}, ${addr.city}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+
+                            </c:when>
+
+                            <c:otherwise>
+                                <p style="color:#cbd5f5;">No addresses found.</p>
+                                <a href="/customer/add-address" class="primary-btn">
+                                    Add Address
+                                </a>
+                            </c:otherwise>
+
+                        </c:choose>
+                    </fieldset>
+
+
+
+                    <!-- DELIVERY -->
+                    <fieldset>
+                        <legend>Delivery Address</legend>
+
+                        <c:choose>
+
+                            <c:when test="${not empty addressList}">
+                                <select name="deliveryAddressId" required>
+                                    <c:forEach var="addr" items="${addressList}">
+                                        <option value="${addr.addressId}">
+                                            ${addr.addressLine}, ${addr.city}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </c:when>
+
+                            <c:otherwise>
+                                <p style="color:#cbd5f5;">No addresses found.</p>
+                            </c:otherwise>
+
+                        </c:choose>
+                    </fieldset>
+
+
+                    <!-- PACKAGE -->
+                    <fieldset>
+                        <legend>Package Details</legend>
+
+                        <select name="packageType" required>
+                            <option value="Envelope">Envelope</option>
+                            <option value="Small Box">Small Box</option>
+                            <option value="Medium Box">Medium Box</option>
+                            <option value="Large Box">Large Box</option>
+                        </select>
+
+                        <input type="number" name="quantity"
+                               min="1" value="1" required
+                               placeholder="Quantity">
+
+                        <input type="number" name="weight"
+                               step="0.1" min="0.1" required
+                               placeholder="Weight (kg)">
+
+                        <textarea name="description"
+                                  rows="3"
+                                  placeholder="Description (optional)"></textarea>
+                    </fieldset>
+
+                    <!-- SHIPPING -->
+                    <fieldset>
+                        <legend>Shipping Type</legend>
+                        <select name="shippingType" required>
+                            <option value="STANDARD">Standard</option>
+                            <option value="EXPRESS">Express</option>
+                            <option value="OVERNIGHT">Overnight</option>
                         </select>
                     </fieldset>
+                    
+                    <div class="btn-center">
+                        <c:if test="${not empty addressList}">
+                             <button class="outline-btn">Place Order</button>
+                         </c:if>
+                    </div>
 
-                    <fieldset>
-                        <legend>Delivery</legend>
-                        <select name="deliveryAddressId">
-                            <c:forEach var="addr" items="${addressList}">
-                                <option value="${addr.addressId}">
-                                    ${addr.addressLine}, ${addr.city}
-                                </option>
-                            </c:forEach>
-                        </select>
-                    </fieldset>
-
-                    <fieldset>
-                         <legend>Package</legend>
-
-                         <div class="package-row">
-                             <select name="packageType">
-                             <option>Envelope</option>
-                             <option>Small Box</option>
-                             <option>Medium Box</option>
-                             <option>Large Box</option>
-                             </select>
-
-                            <input type="number" name="weight" step="0.1" placeholder="Weight (kg)">
-                         </div>
-
-                         <textarea name="description" rows="3" placeholder="Description"></textarea>
-                    </fieldset>
-
-
-                    <fieldset>
-                        <legend>Shipping</legend>
-                        <select name="serviceType">
-                            <option>STANDARD</option>
-                            <option>EXPRESS</option>
-                            <option>OVERNIGHT</option>
-                        </select>
-                        <input type="date" name="pickupDate">
-                    </fieldset>
-
-                    <button class="primary-btn">Place Order</button>
                 </form>
+
+                <!-- FLASH MESSAGES -->
+                <c:if test="${not empty success}">
+                    <p style="color:green;">${success}</p>
+                </c:if>
+
+                <c:if test="${not empty error}">
+                    <p style="color:red;">${error}</p>
+                </c:if>
 
             </div>
 
         </main>
+
     </div>
 </div>
 

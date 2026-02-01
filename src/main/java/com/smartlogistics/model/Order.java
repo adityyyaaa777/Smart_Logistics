@@ -11,6 +11,8 @@ public class Order {
     private Timestamp orderDate;
     private String pickupAddress;
     private String deliveryAddress;
+    private String pickupCity;
+    private String deliveryCity;
     private String itemName;
     private int quantity;
     private double weight;
@@ -52,6 +54,22 @@ public class Order {
 
      public void setDeliveryAddressId(int deliveryAddressId){
         this.deliveryAddressId = deliveryAddressId;
+    }
+
+    public String getPickupCity(){
+        return pickupCity;
+    }
+
+     public void setPickupCity(String pickupCity){
+        this.pickupCity = pickupCity;
+    }
+
+    public String getDeliveryCity(){
+        return deliveryCity;
+    }
+
+     public void setDeliveryCity(String deliveryCity){
+        this.deliveryCity = deliveryCity;
     }
 
     public String getOrderStatus(){
