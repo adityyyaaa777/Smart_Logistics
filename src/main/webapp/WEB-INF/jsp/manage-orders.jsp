@@ -41,10 +41,23 @@
 
         <!-- SIDEBAR -->
         <aside class="sidebar">
-            <nav class="nav-menu">
-                <a href="/admin/dashboard" class="nav-item">Dashboard</a>
+         <nav class="nav-menu">
+
+            <!-- ADMIN -->
+            <c:if test="${sessionScope.loggedUser.roleId == 2}">
+                <a href="/admin/view-admins" class="nav-item">View Admins</a>
+                <a href="/admin/view-agents" class="nav-item">View Agents</a>
+                <a href="/admin/add-user?role=AGENT" class="nav-item">Add Agent</a>
+                <a href="/admin/manage-users" class="nav-item">Manage Users</a>
                 <a href="/admin/manage-orders" class="nav-item">Manage Orders</a>
-            </nav>
+            </c:if>
+
+            <!-- SUPER ADMIN -->
+            <c:if test="${sessionScope.loggedUser.roleId == 0}">
+                <a href="/admin/view-admins?role=ADMIN" class="nav-item">View Admins</a>
+            </c:if>
+
+         </nav>
         </aside>
 
         <!-- MAIN CONTENT -->

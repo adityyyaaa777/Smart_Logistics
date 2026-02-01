@@ -315,4 +315,25 @@ public class UserDAO {
         return 0;
     }
 
+    // COUNT TOTAL ORDERS
+        public int getTotalOrderCount()
+        {
+            String sql = "SELECT COUNT(*) FROM orders";
+
+            try(
+                Connection con = DBUtil.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
+            ) {
+                if(rs.next())
+                {
+                    return rs.getInt(1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return 0;
+        }
+
 }

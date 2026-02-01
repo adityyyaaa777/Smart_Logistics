@@ -81,23 +81,39 @@ BEGIN
 END $$
 DELIMITER ;
 
+
 # GET ALL ORDERS LIST;
 DELIMITER $$
 CREATE PROCEDURE GetAllOrders()
 BEGIN
-    SELECT 
+    SELECT
         o.order_id,
-        o.customer_name,
+        c.customer_name,
 
         CONCAT(a1.address_line, ', ', a1.city) AS pickup_address,
         CONCAT(a2.address_line, ', ', a2.city) AS delivery_address,
 
         o.order_status
     FROM orders o
-    JOIN addresses a1 
+
+    INNER JOIN customers c
+        ON o.customer_id = c.customer_id
+
+    LEFT JOIN addresses a1
         ON o.pickup_address_id = a1.address_id
-    JOIN addresses a2 
+
+    LEFT JOIN addresses a2
         ON o.delivery_address_id = a2.address_id;
+
+END $$
+DELIMITER ;
+
+# DELETE ORDERS
+DELIMITER $$
+CREATE PROCEDURE DeleteOrder(IN oid INT)
+BEGIN
+    DELETE FROM orders
+    WHERE order_id = oid;
 END $$
 
 DELIMITER ;

@@ -40,6 +40,8 @@ public class AdminController {
         model.addAttribute("totalUsers", totalUsers);
         int activeAgents = userDAO.getActiveAgentCount();
         model.addAttribute("activeAgents", activeAgents);
+        int totalOrders = userDAO.getTotalOrderCount();
+        model.addAttribute("totalOrders", totalOrders);
 
         return "admin-dashboard";
     }
