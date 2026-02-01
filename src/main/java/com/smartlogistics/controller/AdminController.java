@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -210,6 +211,22 @@ public class AdminController {
         model.addAttribute("orders", orders);
         return "manage-orders";
     }
+
+    
+    @GetMapping("/admin/delete-order/{id}")
+    public String deleteOrder(@PathVariable int id,
+                          HttpSession session) {
+
+    User logged = (User) session.getAttribute("loggedUser");
+    OrderDAO orderDAO = new OrderDAO();
+    if (logged == null || logged.getRoleId() != User.ROLE_ADMIN) {
+        return "redirect:/login";
+    }
+
+    orderDAO.deleteOrder(id);
+
+    return "redirect:/admin/manage-orders";
+   }
 
 
     

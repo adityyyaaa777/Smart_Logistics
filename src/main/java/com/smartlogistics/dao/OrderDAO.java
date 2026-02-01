@@ -118,6 +118,8 @@ public class OrderDAO{
     return orders;
 }
 
+
+        // GET ALL ORDER LIST FOR ADMIN PAGE
         public List<Order> getAllOrders() {
 
             List<Order> list = new ArrayList<>();
@@ -149,4 +151,18 @@ public class OrderDAO{
         }
 
 
+         // DELETE ORDER FROM ADMIN PAGE
+         public void deleteOrder(int orderId){
+            
+            try(
+                Connection con = DBUtil.getConnection();
+                CallableStatement cs = con.prepareCall("CALL DeleteOrder(?)");
+            ) {
+                cs.setInt(1,orderId);
+                cs.executeUpdate();
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+         }
 }
