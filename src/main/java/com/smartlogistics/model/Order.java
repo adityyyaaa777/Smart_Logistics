@@ -11,6 +11,11 @@ public class Order {
     private Timestamp orderDate;
     private String pickupAddress;
     private String deliveryAddress;
+    private String itemName;
+    private int quantity;
+    private double weight;
+    private String description;
+    private String shippingType;
 
 
 
@@ -81,5 +86,47 @@ public class Order {
     public void setDeliveryAddress(String deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
     }
+
+    public String getItemName(){
+        return itemName;
+    }
+
+    public void setItemName(String itemName){
+        this.itemName = itemName;
+    }
+
+    public int getQuantity(){
+        return quantity;
+    }
+
+    public void setQuantity(int quantity){
+        this.quantity = quantity;
+    }
+
+    public double getWeight(){
+        return weight;
+    }
+
+    public void setWeight(double weight){
+        this.weight = weight;
+    }
+
+    public String getDescription(){
+        return description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+     public String getShippingType(){
+        return shippingType;
+    }
+
+    public void setShippingType(String shippingType){
+        this.shippingType = shippingType;
+    }
+
+    
 
 }

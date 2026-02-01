@@ -33,6 +33,11 @@ public class AdminController {
         }
 
         model.addAttribute("adminName", user.getUsername());
+        int totalUsers = userDAO.getTotalUserCount();
+        model.addAttribute("totalUsers", totalUsers);
+        int activeAgents = userDAO.getActiveAgentCount();
+        model.addAttribute("activeAgents", activeAgents);
+
         return "admin-dashboard";
     }
 
@@ -71,15 +76,15 @@ public class AdminController {
         }
 
         // SUPER ADMIN → ADMIN
-        if ("ADMIN".equals(role) &&
+        if ("ADMIN".equalsIgnoreCase(role) &&
             logged.getRoleId() != User.ROLE_SUPER_ADMIN) {
-            return "redirect:/login";
+            return "redirect:/admin/dashboard";
         }
 
         // ADMIN → AGENT
-        if ("AGENT".equals(role) &&
+        if ("AGENT".equalsIgnoreCase(role) &&
             logged.getRoleId() != User.ROLE_ADMIN) {
-            return "redirect:/login";
+            return "redirect:/admin/dashboard";
         }
 
         model.addAttribute("role", role);
@@ -106,12 +111,12 @@ public class AdminController {
         int roleId;
 
         // SUPER ADMIN → ADMIN
-        if ("ADMIN".equals(role) &&
+        if ("ADMIN".equalsIgnoreCase(role) &&
             logged.getRoleId() == User.ROLE_SUPER_ADMIN) {
             roleId = User.ROLE_ADMIN;
         }
         // ADMIN → AGENT
-        else if ("AGENT".equals(role) &&
+        else if ("AGENT".equalsIgnoreCase(role) &&
                  logged.getRoleId() == User.ROLE_ADMIN) {
             roleId = User.ROLE_AGENT;
         }
@@ -135,7 +140,7 @@ public class AdminController {
                     "error", "Failed to create user");
         }
 
-        return "redirect:/admin/users";
+        return "redirect:/admin/view-agents";
     }
 
     @GetMapping("/admin/view-admins")

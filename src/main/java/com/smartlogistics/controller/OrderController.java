@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 @Controller
 public class OrderController {
@@ -66,10 +68,17 @@ public String showPlaceOrderPage(HttpSession session, Model model) {
     // =========================
     @PostMapping("/customer/place-order")
     public String placeOrder(
-            @RequestParam int pickupAddressId,
-            @RequestParam int deliveryAddressId,
-            HttpSession session,
-            Model model) {
+        @RequestParam int pickupAddressId,
+        @RequestParam int deliveryAddressId,
+        @RequestParam String packageType,
+        @RequestParam int quantity,
+        @RequestParam double weight,
+        @RequestParam(required = false) String description,
+        @RequestParam String shippingType,
+        HttpSession session,
+        Model model,
+        RedirectAttributes ra) 
+ {
 
         User user = (User) session.getAttribute("loggedUser");
 
@@ -84,13 +93,19 @@ public String showPlaceOrderPage(HttpSession session, Model model) {
         order.setPickupAddressId(pickupAddressId);
         order.setDeliveryAddressId(deliveryAddressId);
         order.setOrderStatus("PLACED");
+        order.setItemName(packageType);
+        order.setQuantity(quantity);
+        order.setWeight(weight);
+        order.setDescription(description);
+        order.setShippingType(shippingType);
+
 
         boolean success = orderDAO.placeOrder(order);
 
         if (success) {
-            model.addAttribute("success", "Order placed successfully");
+            ra.addFlashAttribute("success", "Order placed successfully");
         } else {
-            model.addAttribute("error", "Failed to place order");
+            ra.addFlashAttribute("error", "Failed to place order");
         }
 
         return "redirect:/customer/place-order";
@@ -112,7 +127,7 @@ public String showPlaceOrderPage(HttpSession session, Model model) {
             return "redirect:/login";
         }
 
-        List<Order> orders = orderDAO.getOrdersByCustomerId(user.getUserId());
+        List<Order> orders = orderDAO.getOrdersByCustomerId(user.getCustomerId());
 
         if (search != null && !search.isEmpty()) {
             orders = orders.stream()

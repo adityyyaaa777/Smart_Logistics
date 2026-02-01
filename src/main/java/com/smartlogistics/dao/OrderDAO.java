@@ -11,20 +11,48 @@ import java.util.List;
 
 public class OrderDAO{
         public boolean placeOrder(Order order){
-            String sql = "INSERT INTO orders " + 
-            "(customer_id , pickup_address_id , delivery_address_id , order_status)" +
+            String orderSql = "INSERT INTO orders " + 
+            "(customer_id , pickup_address_id , delivery_address_id , order_status )" +
             "VALUES(?,?,?,?)";
+
+            String itemSql = "INSERT INTO order_items " +
+                    "(order_id, item_name, quantity, weight, description, shipping_type) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
 
             try(
                 Connection con = DBUtil.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql);
-            ) {
-                ps.setInt(1,order.getCustomerId());
-                ps.setInt(2,order.getPickupAddressId());
-                ps.setInt(3,order.getDeliveryAddressId());
-                ps.setString(4,order.getOrderStatus());
+                PreparedStatement orderPs =  con.prepareStatement(orderSql, PreparedStatement.RETURN_GENERATED_KEYS);
+            ) { 
+                // ---------- INSERT ORDER ----------
+                orderPs.setInt(1,order.getCustomerId());
+                orderPs.setInt(2,order.getPickupAddressId());
+                orderPs.setInt(3,order.getDeliveryAddressId());
+                orderPs.setString(4,order.getOrderStatus());
 
-                return ps.executeUpdate() > 0;
+                 orderPs.executeUpdate();
+
+
+                  // ---------- GET ORDER ID ----------
+                  ResultSet keys = orderPs.getGeneratedKeys();
+                  if (!keys.next())
+                      return false;
+
+                  int orderId = keys.getInt(1);
+                  // ---------- INSERT ORDER ITEM ----------
+                  try (PreparedStatement itemPs = con.prepareStatement(itemSql)) {
+
+                      itemPs.setInt(1, orderId);
+                      itemPs.setString(2, order.getItemName());
+                      itemPs.setInt(3, order.getQuantity());
+                      itemPs.setDouble(4, order.getWeight());
+                      itemPs.setString(5, order.getDescription());
+                      itemPs.setString(6, order.getShippingType());
+
+                      itemPs.executeUpdate();
+                  }
+
+                  return true;
+
 
             } catch (Exception e) {
                 e.printStackTrace();
