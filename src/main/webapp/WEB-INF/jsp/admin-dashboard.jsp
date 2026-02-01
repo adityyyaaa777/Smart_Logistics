@@ -1,15 +1,15 @@
 <%
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.setHeader("Pragma", "no-cache");
-    response.setDateHeader("Expires", 0);
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+response.setHeader("Pragma", "no-cache");
+response.setDateHeader("Expires", 0);
 %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!-- SESSION + ROLE PROTECTION -->
 <c:if test="${empty sessionScope.loggedUser ||
-             (sessionScope.loggedUser.roleId != 0 &&
-              sessionScope.loggedUser.roleId != 2)}">
+             sessionScope.loggedUser.roleId == 1 ||
+             sessionScope.loggedUser.roleId == 3}">
     <c:redirect url="/login"/>
 </c:if>
 
@@ -21,17 +21,6 @@
 </head>
 
 <body>
-
-<!-- BACKGROUND -->
-<div class="animated-gradient"></div>
-<div class="blob blob--one"></div>
-<div class="blob blob--two"></div>
-
-<svg class="curved-lines" viewBox="0 0 1200 800" preserveAspectRatio="none">
-    <path d="M0,200 C300,100 600,300 1200,150" />
-    <path d="M0,400 C400,250 800,450 1200,300" />
-    <path d="M0,600 C350,500 750,650 1200,520" />
-</svg>
 
 <div class="page-wrapper">
 
@@ -65,7 +54,8 @@
 
                 <!-- ADMIN MENU -->
                 <c:if test="${sessionScope.loggedUser.roleId == 2}">
-                    <a href="/admin/add-user?role=AGENT">Add Agent</a>
+                    <a href="/admin/view-admins" class="nav-item">View Admins</a>
+                    <a href="/admin/add-user?role=AGENT" class="nav-item">Add Agent</a>
                     <a href="/admin/view-agents" class="nav-item">View Agents</a>
                     <a href="/admin/users" class="nav-item">Manage Users</a>
                     <a href="/admin/orders" class="nav-item">Manage Orders</a>
@@ -81,7 +71,7 @@
             <div class="dashboard-header">
                 <h2>
                     <c:choose>
-                        <c:when test="${sessionScope.loggedUser.roleId == 1}">
+                        <c:when test="${sessionScope.loggedUser.roleId == 0}">
                             Super Admin Dashboard
                         </c:when>
                         <c:otherwise>
@@ -89,13 +79,11 @@
                         </c:otherwise>
                     </c:choose>
                 </h2>
-                <p>Welcome back, manage the system from here</p>
+                <p>Welcome back manage the system from here</p>
             </div>
 
-            <!-- ADMIN ONLY CONTENT -->
+            <!-- ADMIN STATS -->
             <c:if test="${sessionScope.loggedUser.roleId == 2}">
-
-                <!-- STATS -->
                 <div class="stats-grid">
 
                     <div class="stat-card">
@@ -120,47 +108,46 @@
 
                 </div>
 
-                <!-- LOWER PANELS -->
-                <div class="dashboard-lower">
+                <!-- QUICK ACTIONS -->
+                <div class="panel">
+                    <h3>Quick Actions</h3>
 
-                    <div class="panel">
-                        <h3>Quick Actions</h3>
+                    <a href="/admin/view-admins" class="quick-card">
+                        <strong>View Admins</strong>
+                        <small>See system administrators</small>
+                    </a>
 
-                        <a href="/admin/add-user?role=AGENT" class="action-button">
-                            Add Agent
-                        </a>
+                    <a href="/admin/orders" class="quick-card">
+                        <strong>Manage Orders</strong>
+                        <small>View update order status</small>
+                    </a>
 
-                        <a href="/admin/orders" class="action-button">
-                            Manage Orders
-                        </a>
-
-                        <a href="/admin/users" class="action-button">
-                            View Users
-                        </a>
-                    </div>
-
-                    <div class="panel">
-                        <h3>System Overview</h3>
-                        <p style="color:#c7d2fe;font-size:0.9rem;">
-                            Monitor users, agents, and logistics operations from one place.
-                            Ensure smooth workflow and timely deliveries.
-                        </p>
-                    </div>
-
+                    <a href="/admin/users" class="quick-card">
+                        <strong>View Users</strong>
+                        <small>Monitor registered users</small>
+                    </a>
                 </div>
-
             </c:if>
 
-            <!-- SUPER ADMIN INFO ONLY -->
-            <c:if test="${sessionScope.loggedUser.roleId == 1}">
+            <!-- SUPER ADMIN PANEL -->
+            <c:if test="${sessionScope.loggedUser.roleId == 0}">
                 <div class="panel">
                     <h3>Super Admin Controls</h3>
                     <p style="color:#c7d2fe;font-size:0.9rem;">
-                        You are responsible for managing administrators and system governance.
-                        Operational tasks are delegated to admins.
+                        You manage administrators and governance.
+                        Operational tasks handled by admins.
                     </p>
                 </div>
             </c:if>
+
+            <!-- SYSTEM OVERVIEW -->
+            <div class="panel">
+                <h3>System Overview</h3>
+                <p style="color:#c7d2fe;font-size:0.9rem;">
+                    Monitor users agents orders deliveries from one place.
+                    Ensure smooth logistics workflow.
+                </p>
+            </div>
 
         </main>
 

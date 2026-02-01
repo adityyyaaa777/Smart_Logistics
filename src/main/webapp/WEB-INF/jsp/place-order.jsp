@@ -52,7 +52,7 @@
 
                 <form method="post" action="/customer/place-order">
 
-                    <fieldset>
+                    <fieldset>  
                         <legend>Pickup</legend>
                         <select name="pickupAddressId">
                             <c:forEach var="addr" items="${addressList}">
@@ -75,16 +75,22 @@
                     </fieldset>
 
                     <fieldset>
-                        <legend>Package</legend>
-                        <select name="packageType">
-                            <option>Envelope</option>
-                            <option>Small Box</option>
-                            <option>Medium Box</option>
-                            <option>Large Box</option>
-                        </select>
-                        <input type="number" name="weight" step="0.1" placeholder="Weight (kg)">
-                        <textarea name="description" rows="3" placeholder="Description"></textarea>
+                         <legend>Package</legend>
+
+                         <div class="package-row">
+                             <select name="packageType">
+                             <option>Envelope</option>
+                             <option>Small Box</option>
+                             <option>Medium Box</option>
+                             <option>Large Box</option>
+                             </select>
+
+                            <input type="number" name="weight" step="0.1" placeholder="Weight (kg)">
+                         </div>
+
+                         <textarea name="description" rows="3" placeholder="Description"></textarea>
                     </fieldset>
+
 
                     <fieldset>
                         <legend>Shipping</legend>
