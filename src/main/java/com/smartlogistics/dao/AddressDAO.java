@@ -77,5 +77,38 @@ public class AddressDAO {
     }
 
 
+    // GET SINGLE ADDRESS BY ID
+    public Address getAddressById(int addressId) {
+
+        Address address = null;
+
+        String sql = "SELECT * FROM addresses WHERE address_id = ?";
+
+        try (
+                Connection con = DBUtil.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, addressId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    address = new Address();
+                    address.setAddressId(rs.getInt("address_id"));
+                    address.setCustomerId(rs.getInt("customer_id"));
+                    address.setAddressLine(rs.getString("address_line"));
+                    address.setCity(rs.getString("city"));
+                    address.setState(rs.getString("state"));
+                    address.setPincode(rs.getString("pincode"));
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return address;
+    }
+
+
     
 }

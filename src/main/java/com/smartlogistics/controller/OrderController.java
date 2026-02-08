@@ -14,12 +14,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.smartlogistics.service.ShipmentService;
+
+
 
 @Controller
 public class OrderController {
 
     private OrderDAO orderDAO;
     private AddressDAO addressDAO = new AddressDAO();
+    private ShipmentService shipmentService = new ShipmentService();
+
     
     public OrderController() {
         this.orderDAO = new OrderDAO();
@@ -100,9 +105,13 @@ public String showPlaceOrderPage(HttpSession session, Model model) {
         order.setShippingType(shippingType);
 
 
-        boolean success = orderDAO.placeOrder(order);
+        int orderId = orderDAO.placeOrder(order);
 
-        if (success) {
+        if (orderId > 0) {
+            Address deliveryAddress = addressDAO.getAddressById(deliveryAddressId);
+            String city = deliveryAddress.getCity();
+
+            shipmentService.autoAssignOrder(orderId, city);
             ra.addFlashAttribute("success", "Order placed successfully");
         } else {
             ra.addFlashAttribute("error", "Failed to place order");
