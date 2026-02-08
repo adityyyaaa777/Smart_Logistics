@@ -166,4 +166,33 @@ public class OrderDAO{
             }
          }
 
+
+         public void updateOrdersByShipment(int shipmentId, String status) {
+             Connection con = null;
+             PreparedStatement ps = null;
+
+             try {
+                 con = DBUtil.getConnection();
+
+                 String sql = "UPDATE orders SET order_status = ? WHERE shipment_id = ?";
+                 ps = con.prepareStatement(sql);
+                 ps.setString(1, status);
+                 ps.setInt(2, shipmentId);
+
+                 ps.executeUpdate();
+
+             } catch (Exception e) {
+                 e.printStackTrace();
+             } finally {
+                 try {
+                     if (ps != null)
+                         ps.close();
+                     if (con != null)
+                         con.close();
+                 } catch (Exception e) {
+                     e.printStackTrace();
+                 }
+             }
+         }
+
 }
