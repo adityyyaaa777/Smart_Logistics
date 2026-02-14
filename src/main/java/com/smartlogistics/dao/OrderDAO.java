@@ -210,4 +210,65 @@ public class OrderDAO {
             e.printStackTrace();
         }
     }
+
+
+    public String getOrderStatus(int orderId) {
+        String status = null;
+
+        try (Connection con = DBUtil.getConnection();
+                PreparedStatement ps = con.prepareStatement("SELECT order_status FROM orders WHERE order_id=?")) {
+
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                status = rs.getString("order_status");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return status;
+    }
+
+    public void updateOrderStatus(int orderId, String status) {
+        try (Connection con = DBUtil.getConnection();
+                PreparedStatement ps = con.prepareStatement("UPDATE orders SET order_status=? WHERE order_id=?")) {
+
+            ps.setString(1, status);
+            ps.setInt(2, orderId);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public Order getOrderById(int orderId) {
+        Order order = null;
+
+        String sql = "SELECT order_id, shipment_id FROM orders WHERE order_id=?";
+
+        try (Connection con = DBUtil.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                order = new Order();
+                order.setOrderId(rs.getInt("order_id"));
+                order.setShipmentId(rs.getInt("shipment_id"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return order;
+    }
+
+
 }

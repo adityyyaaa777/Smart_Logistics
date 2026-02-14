@@ -12,8 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.smartlogistics.service.OrderService;
 import com.smartlogistics.service.ShipmentService;
 
 
@@ -157,4 +159,27 @@ public String showPlaceOrderPage(HttpSession session, Model model) {
         return "orders";
     }
     
+    @PostMapping("/customer/updateTracking")
+    @ResponseBody
+    public String updateTracking(@RequestParam int orderId) {
+
+        OrderService orderService = new OrderService();
+        orderService.progressOrderStatus(orderId);
+
+        return "OK";
+    }
+
+
+    @GetMapping("/customer/track-order")
+    public String trackOrder(@RequestParam int orderId, Model model) {
+
+        String status = orderDAO.getOrderStatus(orderId);
+
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("status", status);
+
+        return "map";
+    }
+
+
 }

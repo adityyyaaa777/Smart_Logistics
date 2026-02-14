@@ -19,6 +19,15 @@ public class Order {
     private double weight;
     private String description;
     private String shippingType;
+    private int shipmentId;
+
+    public int getShipmentId() {
+        return shipmentId;
+    }
+
+    public void setShipmentId(int shipmentId) {
+        this.shipmentId = shipmentId;
+    }
 
 
 

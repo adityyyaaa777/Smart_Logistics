@@ -241,7 +241,7 @@ public class UserDAO {
         return admins;
     }
 
-    // GET ALL ADMIN ONLY FROM STORED PROCEDURES
+    // GET ALL AGENT ONLY FROM STORED PROCEDURES
 
     public List<User> getAgents()
     {

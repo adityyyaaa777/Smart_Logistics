@@ -93,6 +93,7 @@
                             <th>Delivery</th>
                             <th>Package</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
 
@@ -125,12 +126,18 @@
                                         ${o.orderStatus}
                                     </span>
                                 </td>
+
+                                <td>
+                                    <a href="/map?orderId=${o.orderId}" class="track-btn">
+                                        Track
+                                    </a>
+                                </td>
                             </tr>
                         </c:forEach>
 
                         <c:if test="${empty orders}">
                             <tr>
-                                <td colspan="6" style="text-align:center;">
+                                <td colspan="7" style="text-align:center;">
                                     No orders found
                                 </td>
                             </tr>
